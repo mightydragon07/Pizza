@@ -691,7 +691,7 @@ document.querySelectorAll('.pizza-card').forEach(card => {
             // Update price
             const additionalPrice = parseInt(btn.dataset.price);
             const newPrice = basePrice + additionalPrice;
-            priceElement.textContent = ' + newPrice;
+            priceElement.textContent = ' + ' + newPrice.toLocaleString();
             
             // Pizza size animation
             const sizePizza = btn.querySelector('.size-pizza');
