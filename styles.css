@@ -8,16 +8,21 @@
     --primary-color: #d4142a;
     --secondary-color: #f4c430;
     --dark-color: #1a1a1a;
+    --darker-color: #0f0f0f;
     --light-color: #ffffff;
     --accent-color: #ff6b35;
-    --text-color: #333;
-    --bg-light: #f8f8f8;
+    --text-color: #e0e0e0;
+    --text-muted: #b0b0b0;
+    --bg-dark: #1a1a1a;
+    --card-dark: #2a2a2a;
+    --border-color: rgba(212, 20, 42, 0.3);
 }
 
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
     color: var(--text-color);
+    background: var(--darker-color);
     overflow-x: hidden;
     position: relative;
 }
@@ -28,7 +33,7 @@ body {
     padding: 0 20px;
 }
 
-/* Pizza Background Animation */
+/* Enhanced Pizza Background Animation */
 .pizza-background {
     position: fixed;
     top: 0;
@@ -37,35 +42,52 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: -1;
-    opacity: 0.05;
+    opacity: 0.15;
 }
 
 .pizza-slice {
     position: absolute;
     font-size: 2rem;
-    animation: floatPizza 15s linear infinite;
+    animation: floatPizza 25s linear infinite;
+    color: var(--primary-color);
 }
 
-.slice-1 { top: 10%; left: 5%; animation-delay: 0s; }
-.slice-2 { top: 20%; left: 90%; animation-delay: 2s; }
-.slice-3 { top: 40%; left: 10%; animation-delay: 4s; }
-.slice-4 { top: 60%; left: 85%; animation-delay: 6s; }
-.slice-5 { top: 80%; left: 15%; animation-delay: 8s; }
-.slice-6 { top: 30%; left: 70%; animation-delay: 10s; }
-.slice-7 { top: 70%; left: 60%; animation-delay: 12s; }
-.slice-8 { top: 50%; left: 40%; animation-delay: 14s; }
+.slice-1 { top: 5%; left: 5%; animation-delay: 0s; }
+.slice-2 { top: 10%; left: 90%; animation-delay: 2s; }
+.slice-3 { top: 20%; left: 15%; animation-delay: 4s; }
+.slice-4 { top: 30%; left: 85%; animation-delay: 6s; }
+.slice-5 { top: 40%; left: 10%; animation-delay: 8s; }
+.slice-6 { top: 50%; left: 75%; animation-delay: 10s; }
+.slice-7 { top: 60%; left: 25%; animation-delay: 12s; }
+.slice-8 { top: 70%; left: 80%; animation-delay: 14s; }
+.slice-9 { top: 80%; left: 35%; animation-delay: 16s; }
+.slice-10 { top: 90%; left: 60%; animation-delay: 18s; }
+.slice-11 { top: 15%; left: 50%; animation-delay: 20s; }
+.slice-12 { top: 35%; left: 40%; animation-delay: 22s; }
+.slice-13 { top: 55%; left: 5%; animation-delay: 24s; }
+.slice-14 { top: 75%; left: 95%; animation-delay: 26s; }
+.slice-15 { top: 85%; left: 15%; animation-delay: 28s; }
 
 @keyframes floatPizza {
     0% {
-        transform: translateY(0px) rotate(0deg);
-        opacity: 0.05;
-    }
-    50% {
+        transform: translateY(0px) rotate(0deg) translateX(0px);
         opacity: 0.1;
     }
+    25% {
+        opacity: 0.2;
+        transform: translateY(-30px) rotate(90deg) translateX(15px);
+    }
+    50% {
+        opacity: 0.15;
+        transform: translateY(-20px) rotate(180deg) translateX(-15px);
+    }
+    75% {
+        opacity: 0.25;
+        transform: translateY(-40px) rotate(270deg) translateX(10px);
+    }
     100% {
-        transform: translateY(-30px) rotate(360deg);
-        opacity: 0.05;
+        transform: translateY(0px) rotate(360deg) translateX(0px);
+        opacity: 0.1;
     }
 }
 
@@ -74,10 +96,11 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(26, 26, 26, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(20px);
     z-index: 1000;
     transition: all 0.3s ease;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .nav-container {
@@ -94,11 +117,12 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    cursor: pointer;
 }
 
 .logo-pizza {
     font-size: 2rem;
-    animation: rotatePizza 3s linear infinite;
+    animation: rotatePizza 4s linear infinite;
 }
 
 @keyframes rotatePizza {
@@ -122,7 +146,7 @@ body {
     height: 3px;
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
     transform: scaleX(0);
-    animation: logoAccent 2s ease-in-out infinite;
+    animation: logoAccent 3s ease-in-out infinite;
 }
 
 @keyframes logoAccent {
@@ -134,6 +158,7 @@ body {
     display: flex;
     list-style: none;
     gap: 2rem;
+    transition: all 0.3s ease;
 }
 
 .nav-link {
@@ -167,6 +192,7 @@ body {
     display: none;
     flex-direction: column;
     cursor: pointer;
+    z-index: 1001;
 }
 
 .hamburger span {
@@ -175,6 +201,19 @@ body {
     background: var(--light-color);
     margin: 3px 0;
     transition: 0.3s;
+    border-radius: 2px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
 }
 
 /* Hero Section */
@@ -184,7 +223,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--dark-color) 0%, #2d2d2d 100%);
+    background: linear-gradient(135deg, var(--darker-color) 0%, var(--dark-color) 50%, #2d2d2d 100%);
     overflow: hidden;
 }
 
@@ -194,60 +233,66 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.1;
+    opacity: 0.15;
 }
 
 .floating-ingredient {
     position: absolute;
-    font-size: 3rem;
-    animation: float 6s ease-in-out infinite;
+    font-size: 4rem;
+    animation: float 8s ease-in-out infinite;
 }
 
-.ingredient-1 { top: 20%; left: 10%; animation-delay: 0s; }
-.ingredient-2 { top: 30%; right: 15%; animation-delay: 1s; }
-.ingredient-3 { bottom: 30%; left: 15%; animation-delay: 2s; }
-.ingredient-4 { bottom: 20%; right: 20%; animation-delay: 3s; }
-.ingredient-5 { top: 50%; left: 5%; animation-delay: 4s; }
-.ingredient-6 { top: 60%; right: 10%; animation-delay: 5s; }
+.ingredient-1 { top: 15%; left: 5%; animation-delay: 0s; }
+.ingredient-2 { top: 25%; right: 10%; animation-delay: 1s; }
+.ingredient-3 { bottom: 35%; left: 10%; animation-delay: 2s; }
+.ingredient-4 { bottom: 25%; right: 15%; animation-delay: 3s; }
+.ingredient-5 { top: 45%; left: 8%; animation-delay: 4s; }
+.ingredient-6 { top: 55%; right: 12%; animation-delay: 5s; }
 
 @keyframes float {
     0%, 100% {
         transform: translateY(0px) rotate(0deg);
     }
-    50% {
-        transform: translateY(-20px) rotate(180deg);
+    33% {
+        transform: translateY(-20px) rotate(120deg);
+    }
+    66% {
+        transform: translateY(-30px) rotate(240deg);
     }
 }
 
 .hero-pizza-animation {
     position: absolute;
-    top: 20%;
-    right: 10%;
+    top: 15%;
+    right: 8%;
     z-index: 1;
 }
 
 .spinning-pizza {
-    font-size: 8rem;
-    animation: spinPizza 4s linear infinite;
-    opacity: 0.3;
+    font-size: 10rem;
+    animation: spinPizza 6s linear infinite;
+    opacity: 0.4;
 }
 
 @keyframes spinPizza {
-    from { transform: rotate(0deg) scale(1); }
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(1.1); }
     50% { transform: rotate(180deg) scale(1.2); }
-    to { transform: rotate(360deg) scale(1); }
+    75% { transform: rotate(270deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
 }
 
 .hero-content {
     text-align: center;
     z-index: 2;
+    position: relative;
 }
 
 .hero-title {
-    font-size: 4.5rem;
+    font-size: 5rem;
     font-weight: bold;
     color: var(--light-color);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     line-height: 0.9;
 }
 
@@ -258,11 +303,11 @@ body {
 
 .title-line:first-child {
     color: var(--primary-color);
-    animation: slideInLeft 1s ease-out 0.5s both;
+    animation: slideInLeft 1.2s ease-out 0.5s both;
 }
 
 .title-line:last-child {
-    animation: slideInRight 1s ease-out 1s both;
+    animation: slideInRight 1.2s ease-out 1s both;
 }
 
 @keyframes slideInLeft {
@@ -288,15 +333,15 @@ body {
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
     animation: fadeInUp 1s ease-out 1.5s both;
 }
 
 @keyframes fadeInUp {
     from {
-        transform: translateY(30px);
+        transform: translateY(50px);
         opacity: 0;
     }
     to {
@@ -305,33 +350,39 @@ body {
     }
 }
 
+.cta-container {
+    display: flex;
+    justify-content: center;
+    animation: fadeInUp 1s ease-out 2s both;
+}
+
 .cta-button {
     background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
     color: var(--light-color);
     border: none;
-    padding: 15px 40px;
-    font-size: 1.1rem;
+    padding: 20px 50px;
+    font-size: 1.2rem;
     font-weight: bold;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
-    animation: fadeInUp 1s ease-out 2s both;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    box-shadow: 0 5px 25px rgba(212, 20, 42, 0.3);
 }
 
 .cta-pizza {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     animation: bounce 2s infinite;
 }
 
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-5px); }
-    60% { transform: translateY(-3px); }
+    40% { transform: translateY(-8px); }
+    60% { transform: translateY(-5px); }
 }
 
 .cta-button::before {
@@ -342,7 +393,7 @@ body {
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
+    transition: left 0.6s;
 }
 
 .cta-button:hover::before {
@@ -350,8 +401,8 @@ body {
 }
 
 .cta-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(212, 20, 42, 0.4);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(212, 20, 42, 0.5);
 }
 
 .scroll-indicator {
@@ -363,31 +414,31 @@ body {
 }
 
 .scroll-arrow {
-    width: 20px;
-    height: 20px;
-    border-right: 2px solid var(--light-color);
-    border-bottom: 2px solid var(--light-color);
+    width: 24px;
+    height: 24px;
+    border-right: 3px solid var(--light-color);
+    border-bottom: 3px solid var(--light-color);
     transform: rotate(45deg);
 }
 
 @keyframes bounceScroll {
     0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-    40% { transform: translateX(-50%) translateY(-10px); }
-    60% { transform: translateX(-50%) translateY(-5px); }
+    40% { transform: translateX(-50%) translateY(-15px); }
+    60% { transform: translateX(-50%) translateY(-8px); }
 }
 
 /* Menu Section */
 .menu-section {
-    padding: 100px 0;
-    background: var(--bg-light);
+    padding: 120px 0;
+    background: var(--bg-dark);
     position: relative;
 }
 
 .section-title {
-    font-size: 3rem;
+    font-size: 3.5rem;
     text-align: center;
-    margin-bottom: 60px;
-    color: var(--dark-color);
+    margin-bottom: 80px;
+    color: var(--light-color);
     position: relative;
     display: flex;
     align-items: center;
@@ -396,53 +447,58 @@ body {
 }
 
 .title-pizza {
-    font-size: 3.5rem;
-    animation: wiggle 2s ease-in-out infinite;
+    font-size: 4rem;
+    animation: wiggle 3s ease-in-out infinite;
 }
 
 @keyframes wiggle {
-    0%, 100% { transform: rotate(-5deg); }
-    50% { transform: rotate(5deg); }
+    0%, 100% { transform: rotate(-8deg) scale(1); }
+    25% { transform: rotate(8deg) scale(1.1); }
+    50% { transform: rotate(-5deg) scale(1); }
+    75% { transform: rotate(5deg) scale(1.1); }
 }
 
 .section-title::after {
     content: '';
     position: absolute;
-    bottom: -10px;
+    bottom: -15px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
-    height: 3px;
+    width: 120px;
+    height: 4px;
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border-radius: 2px;
 }
 
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 30px;
+    gap: 40px;
 }
 
 .pizza-card {
-    background: var(--light-color);
-    border-radius: 20px;
-    padding: 20px;
+    background: var(--card-dark);
+    border-radius: 25px;
+    padding: 25px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
+    border: 2px solid transparent;
 }
 
 .pizza-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    transform: translateY(-15px) rotateX(5deg);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    border-color: var(--primary-color);
 }
 
 .pizza-image {
     position: relative;
-    height: 250px;
-    margin-bottom: 20px;
-    border-radius: 15px;
+    height: 280px;
+    margin-bottom: 25px;
+    border-radius: 20px;
     overflow: hidden;
 }
 
@@ -450,11 +506,11 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
 }
 
 .pizza-card:hover .pizza-photo {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 .pizza-overlay {
@@ -463,12 +519,12 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.5);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s ease;
 }
 
 .pizza-card:hover .pizza-overlay {
@@ -476,26 +532,27 @@ body {
 }
 
 .pizza-emoji {
-    font-size: 4rem;
-    animation: rotatePizza 2s linear infinite;
+    font-size: 5rem;
+    animation: rotatePizza 3s linear infinite;
 }
 
 .pizza-info h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: var(--dark-color);
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+    color: var(--light-color);
 }
 
 .pizza-info p {
-    color: #666;
-    margin-bottom: 15px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    font-size: 1rem;
 }
 
 .price {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: bold;
     color: var(--primary-color);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     display: block;
 }
 
@@ -503,17 +560,18 @@ body {
     background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
+    padding: 12px 25px;
+    border-radius: 30px;
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     margin: 0 auto;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
+    font-size: 1rem;
 }
 
 .pizza-card:hover .order-btn {
@@ -522,12 +580,12 @@ body {
 }
 
 .order-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(212, 20, 42, 0.3);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(212, 20, 42, 0.4);
 }
 
 .order-btn span {
-    animation: spin 1s linear infinite;
+    animation: spin 2s linear infinite;
 }
 
 @keyframes spin {
@@ -537,34 +595,35 @@ body {
 
 /* About Section */
 .about-section {
-    padding: 100px 0;
-    background: var(--light-color);
+    padding: 120px 0;
+    background: var(--darker-color);
     position: relative;
 }
 
 .about-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    gap: 80px;
     align-items: center;
 }
 
 .about-text h2 {
-    font-size: 3rem;
-    margin-bottom: 30px;
-    color: var(--dark-color);
+    font-size: 3.5rem;
+    margin-bottom: 40px;
+    color: var(--light-color);
 }
 
 .about-text p {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     line-height: 1.8;
-    margin-bottom: 40px;
-    color: #666;
+    margin-bottom: 50px;
+    color: var(--text-muted);
 }
 
 .stats {
     display: flex;
-    gap: 40px;
+    gap: 50px;
+    justify-content: center;
 }
 
 .stat {
@@ -573,28 +632,28 @@ body {
 }
 
 .stat-icon {
-    font-size: 2rem;
+    font-size: 2.5rem;
     display: block;
-    margin-bottom: 10px;
-    animation: pulse 2s infinite;
+    margin-bottom: 15px;
+    animation: pulse 3s infinite;
 }
 
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.2); }
 }
 
 .stat-number {
     display: block;
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: bold;
     color: var(--primary-color);
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .stat-label {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 1rem;
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -607,69 +666,69 @@ body {
 }
 
 .chef-illustration {
-    width: 200px;
-    height: 300px;
+    width: 250px;
+    height: 350px;
     position: relative;
-    animation: sway 3s ease-in-out infinite;
+    animation: sway 4s ease-in-out infinite;
 }
 
 .chef-hat {
-    font-size: 4rem;
+    font-size: 5rem;
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    animation: bounce 2s infinite;
+    animation: bounce 3s infinite;
 }
 
 .chef-pizza {
-    font-size: 3rem;
+    font-size: 4rem;
     position: absolute;
-    bottom: 50px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
-    animation: rotatePizza 3s linear infinite;
+    animation: rotatePizza 4s linear infinite;
 }
 
 @keyframes sway {
-    0%, 100% { transform: rotate(-2deg); }
-    50% { transform: rotate(2deg); }
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
 }
 
 .pizza-making-animation {
     position: absolute;
-    top: 20%;
-    right: -20%;
+    top: 15%;
+    right: -25%;
     z-index: 1;
 }
 
 .ingredient-drop {
     position: absolute;
-    font-size: 1.5rem;
-    animation: drop 3s ease-in-out infinite;
+    font-size: 2rem;
+    animation: drop 4s ease-in-out infinite;
 }
 
 .ingredient-drop:nth-child(1) { animation-delay: 0s; left: 0; }
-.ingredient-drop:nth-child(2) { animation-delay: 1s; left: 30px; }
-.ingredient-drop:nth-child(3) { animation-delay: 2s; left: 60px; }
+.ingredient-drop:nth-child(2) { animation-delay: 1.5s; left: 40px; }
+.ingredient-drop:nth-child(3) { animation-delay: 3s; left: 80px; }
 
 @keyframes drop {
     0% {
-        transform: translateY(-20px);
+        transform: translateY(-30px);
         opacity: 0;
     }
     50% {
         opacity: 1;
     }
     100% {
-        transform: translateY(100px);
+        transform: translateY(150px);
         opacity: 0;
     }
 }
 
 /* Contact Section */
 .contact-section {
-    padding: 100px 0;
+    padding: 120px 0;
     background: var(--dark-color);
     color: var(--light-color);
     position: relative;
@@ -682,45 +741,51 @@ body {
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    gap: 80px;
 }
 
 .contact-item {
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     display: flex;
     align-items: flex-start;
-    gap: 15px;
+    gap: 20px;
 }
 
 .contact-icon {
-    font-size: 1.5rem;
-    animation: pulse 2s infinite;
+    font-size: 2rem;
+    animation: pulse 3s infinite;
 }
 
 .contact-item h3 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
+    font-size: 1.4rem;
+    margin-bottom: 12px;
     color: var(--primary-color);
+}
+
+.contact-item p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
 }
 
 .contact-form {
     background: rgba(255,255,255,0.05);
-    padding: 40px;
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
+    padding: 50px;
+    border-radius: 25px;
+    backdrop-filter: blur(15px);
     position: relative;
+    border: 2px solid var(--border-color);
 }
 
 .form-pizza-animation {
     position: absolute;
-    top: -20px;
-    right: -20px;
+    top: -25px;
+    right: -25px;
     z-index: 1;
 }
 
 .form-pizza {
-    font-size: 3rem;
-    animation: floatForm 4s ease-in-out infinite;
+    font-size: 4rem;
+    animation: floatForm 5s ease-in-out infinite;
 }
 
 @keyframes floatForm {
@@ -728,28 +793,30 @@ body {
         transform: translateY(0px) rotate(0deg);
     }
     50% {
-        transform: translateY(-15px) rotate(180deg);
+        transform: translateY(-20px) rotate(180deg);
     }
 }
 
 .contact-form input,
 .contact-form textarea {
     width: 100%;
-    padding: 15px;
-    margin-bottom: 20px;
+    padding: 18px;
+    margin-bottom: 25px;
     border: none;
-    border-radius: 10px;
+    border-radius: 15px;
     background: rgba(255,255,255,0.1);
     color: var(--light-color);
-    font-size: 1rem;
+    font-size: 1.1rem;
     transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
     outline: none;
     background: rgba(255,255,255,0.15);
-    box-shadow: 0 0 20px rgba(212, 20, 42, 0.3);
+    box-shadow: 0 0 25px rgba(212, 20, 42, 0.4);
+    border-color: var(--primary-color);
 }
 
 .contact-form input::placeholder,
@@ -761,26 +828,26 @@ body {
     background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
     color: var(--light-color);
     border: none;
-    padding: 15px 30px;
+    padding: 18px 40px;
     border-radius: 50px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
     transition: all 0.3s ease;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .submit-pizza {
-    animation: rotatePizza 2s linear infinite;
+    animation: rotatePizza 3s linear infinite;
 }
 
 .submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(212, 20, 42, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(212, 20, 42, 0.4);
 }
 
 /* Footer */
@@ -788,17 +855,17 @@ body {
     background: #000;
     color: var(--light-color);
     text-align: center;
-    padding: 20px 0;
+    padding: 30px 0;
 }
 
 .footer-pizza {
-    font-size: 1.2rem;
-    animation: twinkle 1.5s ease-in-out infinite;
+    font-size: 1.5rem;
+    animation: twinkle 2s ease-in-out infinite;
 }
 
 @keyframes twinkle {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    50% { opacity: 0.3; }
 }
 
 /* Pizza Rain Effect */
@@ -814,9 +881,9 @@ body {
 
 .pizza-drop {
     position: absolute;
-    font-size: 1rem;
+    font-size: 1.2rem;
     animation: rainDrop linear infinite;
-    opacity: 0.1;
+    opacity: 0.2;
 }
 
 @keyframes rainDrop {
@@ -825,10 +892,10 @@ body {
         opacity: 0;
     }
     10% {
-        opacity: 0.1;
+        opacity: 0.2;
     }
     90% {
-        opacity: 0.1;
+        opacity: 0.2;
     }
     100% {
         transform: translateY(100vh) rotate(360deg);
@@ -843,7 +910,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--dark-color);
+    background: var(--darker-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -852,14 +919,14 @@ body {
 }
 
 .loader-pizza {
-    font-size: 4rem;
-    animation: loadSpin 1s linear infinite;
+    font-size: 5rem;
+    animation: loadSpin 1.5s linear infinite;
 }
 
 @keyframes loadSpin {
-    from { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(180deg) scale(1.2); }
-    to { transform: rotate(360deg) scale(1); }
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.3); }
+    100% { transform: rotate(360deg) scale(1); }
 }
 
 /* Scroll Progress Bar */
@@ -868,7 +935,7 @@ body {
     top: 0;
     left: 0;
     width: 0%;
-    height: 3px;
+    height: 4px;
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
     z-index: 9999;
     transition: width 0.1s ease;
@@ -878,9 +945,9 @@ body {
 .ripple {
     position: absolute;
     border-radius: 50%;
-    background: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.4);
     transform: scale(0);
-    animation: rippleEffect 0.6s ease-out;
+    animation: rippleEffect 0.8s ease-out;
 }
 
 @keyframes rippleEffect {
@@ -900,8 +967,8 @@ body {
     height: 100%;
     background: linear-gradient(45deg, transparent, rgba(212, 20, 42, 0.1), transparent);
     transform: translateX(-100%);
-    transition: transform 0.6s;
-    border-radius: 20px;
+    transition: transform 0.8s;
+    border-radius: 25px;
 }
 
 .pizza-card:hover::before {
@@ -917,70 +984,89 @@ body {
     .nav-menu {
         position: fixed;
         left: -100%;
-        top: 70px;
+        top: 80px;
         flex-direction: column;
-        background: var(--dark-color);
+        background: var(--darker-color);
         width: 100%;
         text-align: center;
-        transition: 0.3s;
-        padding: 30px 0;
+        transition: 0.4s;
+        padding: 40px 0;
+        border-top: 2px solid var(--border-color);
     }
     
     .nav-menu.active {
         left: 0;
     }
     
+    .nav-menu li {
+        margin: 15px 0;
+    }
+    
     .hero-title {
-        font-size: 3rem;
+        font-size: 3.5rem;
     }
     
     .spinning-pizza {
-        font-size: 4rem;
+        font-size: 6rem;
+        right: 5%;
+    }
+    
+    .cta-button {
+        padding: 18px 40px;
+        font-size: 1.1rem;
     }
     
     .menu-grid {
         grid-template-columns: 1fr;
+        gap: 30px;
     }
     
     .about-content {
         grid-template-columns: 1fr;
+        gap: 50px;
     }
     
     .contact-grid {
         grid-template-columns: 1fr;
+        gap: 50px;
     }
     
     .stats {
         flex-direction: column;
-        gap: 20px;
+        gap: 30px;
+        align-items: center;
     }
     
     .section-title {
-        font-size: 2rem;
-    }
-    
-    .title-pizza {
         font-size: 2.5rem;
     }
     
+    .title-pizza {
+        font-size: 3rem;
+    }
+    
     .floating-ingredient {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
     
     .pizza-slice {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
     }
 }
 
 @media (max-width: 480px) {
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
     }
     
     .section-title {
-        font-size: 1.8rem;
+        font-size: 2rem;
         flex-direction: column;
-        gap: 10px;
+        gap: 15px;
     }
     
     .stats {
@@ -990,10 +1076,31 @@ body {
     
     .menu-grid {
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 25px;
     }
     
     .pizza-card {
-        padding: 15px;
+        padding: 20px;
+    }
+    
+    .cta-button {
+        padding: 15px 35px;
+        font-size: 1rem;
+    }
+    
+    .spinning-pizza {
+        font-size: 4rem;
+    }
+    
+    .floating-ingredient {
+        font-size: 2rem;
+    }
+    
+    .contact-form {
+        padding: 30px;
+    }
+    
+    .hero-content {
+        padding: 0 20px;
     }
 }

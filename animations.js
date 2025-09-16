@@ -21,34 +21,37 @@ window.addEventListener('load', () => {
     }
 });
 
-// Pizza Rain Effect
+// Enhanced Pizza Rain Effect
 function createPizzaRain() {
     const pizzaRain = document.getElementById('pizzaRain');
-    const pizzaEmojis = ['🍕', '🍅', '🧀', '🌿', '🫒', '🍄'];
+    const pizzaEmojis = ['🍕', '🍅', '🧀', '🌿', '🫒', '🍄', '🥓', '🌶️'];
     
     function createPizzaDrop() {
         const drop = document.createElement('div');
         drop.className = 'pizza-drop';
         drop.textContent = pizzaEmojis[Math.floor(Math.random() * pizzaEmojis.length)];
         drop.style.left = Math.random() * 100 + '%';
-        drop.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        drop.style.opacity = Math.random() * 0.3 + 0.1;
+        drop.style.animationDuration = (Math.random() * 4 + 3) + 's';
+        drop.style.opacity = Math.random() * 0.4 + 0.1;
+        drop.style.fontSize = (Math.random() * 1 + 0.8) + 'rem';
         
         pizzaRain.appendChild(drop);
         
         setTimeout(() => {
-            drop.remove();
-        }, 5000);
+            if (drop.parentNode) {
+                drop.remove();
+            }
+        }, 7000);
     }
     
     // Create pizza drops periodically
-    setInterval(createPizzaDrop, 500);
+    setInterval(createPizzaDrop, 300);
 }
 
 // Initialize pizza rain
 createPizzaRain();
 
-// Mobile Navigation Toggle
+// Mobile Navigation Toggle with Enhanced Animation
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
@@ -56,16 +59,11 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
     
-    // Animate hamburger
-    const spans = hamburger.querySelectorAll('span');
-    if (hamburger.classList.contains('active')) {
-        spans[0].style.transform = 'rotate(-45deg) translate(-5px, 6px)';
-        spans[1].style.opacity = '0';
-        spans[2].style.transform = 'rotate(45deg) translate(-5px, -6px)';
+    // Add body scroll lock for mobile menu
+    if (navMenu.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
     } else {
-        spans[0].style.transform = 'none';
-        spans[1].style.opacity = '1';
-        spans[2].style.transform = 'none';
+        document.body.style.overflow = '';
     }
 });
 
@@ -73,12 +71,17 @@ hamburger.addEventListener('click', () => {
 document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
     hamburger.classList.remove('active');
     navMenu.classList.remove('active');
-    
-    const spans = hamburger.querySelectorAll('span');
-    spans[0].style.transform = 'none';
-    spans[1].style.opacity = '1';
-    spans[2].style.transform = 'none';
+    document.body.style.overflow = '';
 }));
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
 
 // Smooth Scrolling for Navigation Links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -86,28 +89,59 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            const offsetTop = target.offsetTop - 80;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
             });
         }
     });
 });
 
-// Navbar Background Change on Scroll
+// Enhanced Navbar Background Change on Scroll
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 100) {
-        navbar.style.background = 'rgba(26, 26, 26, 0.98)';
-        navbar.style.backdropFilter = 'blur(20px)';
+    const scrolled = window.pageYOffset;
+    
+    if (scrolled > 100) {
+        navbar.style.background = 'rgba(15, 15, 15, 0.98)';
+        navbar.style.backdropFilter = 'blur(25px)';
+        navbar.style.boxShadow = '0 5px 25px rgba(0,0,0,0.3)';
     } else {
-        navbar.style.background = 'rgba(26, 26, 26, 0.95)';
-        navbar.style.backdropFilter = 'blur(10px)';
+        navbar.style.background = 'rgba(15, 15, 15, 0.95)';
+        navbar.style.backdropFilter = 'blur(20px)';
+        navbar.style.boxShadow = 'none';
     }
+    
+    // Parallax effects
+    parallaxEffects(scrolled);
 });
 
+// Enhanced Parallax Effects
+function parallaxEffects(scrolled) {
+    // Floating ingredients parallax
+    document.querySelectorAll('.floating-ingredient').forEach((ingredient, index) => {
+        const speed = 0.3 + (index * 0.1);
+        const rotation = scrolled * 0.2;
+        ingredient.style.transform = `translateY(${scrolled * speed}px) rotate(${rotation}deg)`;
+    });
+    
+    // Hero pizza animation
+    const heroPizza = document.querySelector('.spinning-pizza');
+    if (heroPizza) {
+        heroPizza.style.transform = `rotate(${scrolled * 0.8}deg) scale(${1 + scrolled * 0.0008})`;
+    }
+    
+    // Background pizza slices
+    document.querySelectorAll('.pizza-slice').forEach((slice, index) => {
+        const speed = 0.15 + (index * 0.03);
+        const rotation = scrolled * 0.1;
+        slice.style.transform = `translateY(${scrolled * speed}px) rotate(${rotation}deg)`;
+    });
+}
+
 // Animated Counter for Stats
-const animateCounter = (element, target, duration = 2000) => {
+const animateCounter = (element, target, duration = 2500) => {
     let start = 0;
     const increment = target / (duration / 16);
     
@@ -131,9 +165,9 @@ const animateCounter = (element, target, duration = 2000) => {
     counter();
 };
 
-// Intersection Observer for Animations
+// Enhanced Intersection Observer for Animations
 const observerOptions = {
-    threshold: 0.1,
+    threshold: 0.15,
     rootMargin: '0px 0px -50px 0px'
 };
 
@@ -149,27 +183,45 @@ const observer = new IntersectionObserver((entries) => {
                 let numericTarget;
                 
                 if (target.includes('k+')) {
-                    numericTarget = parseInt(target.replace('k+', ''));
+                    numericTarget = parseInt(target.replace('k+', '')) * 1000;
                 } else if (target.includes('+')) {
                     numericTarget = parseInt(target.replace('+', ''));
                 } else if (target.includes('%')) {
                     numericTarget = parseInt(target.replace('%', ''));
+                } else {
+                    numericTarget = parseInt(target);
                 }
                 
                 entry.target.textContent = '0';
                 animateCounter(entry.target, numericTarget);
+            }
+            
+            // Add staggered animation for pizza cards
+            if (entry.target.classList.contains('pizza-card')) {
+                const cards = document.querySelectorAll('.pizza-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
             }
         }
     });
 }, observerOptions);
 
 // Observe elements for animation
-document.querySelectorAll('.pizza-card, .stat-number, .chef-illustration').forEach(el => {
+document.querySelectorAll('.pizza-card, .stat-number, .chef-illustration, .contact-item').forEach(el => {
     observer.observe(el);
 });
 
 // Enhanced Pizza Card Effects
 document.querySelectorAll('.pizza-card').forEach(card => {
+    // Initial state for animation
+    card.style.opacity = '0.3';
+    card.style.transform = 'translateY(50px)';
+    card.style.transition = 'all 0.6s ease';
+    
     // Mouse move tilt effect
     card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
@@ -179,10 +231,10 @@ document.querySelectorAll('.pizza-card').forEach(card => {
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         
-        const rotateX = (y - centerY) / 10;
-        const rotateY = (centerX - x) / 10;
+        const rotateX = (y - centerY) / 15;
+        const rotateY = (centerX - x) / 15;
         
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-15px)`;
     });
     
     card.addEventListener('mouseleave', () => {
@@ -205,10 +257,11 @@ document.querySelectorAll('.pizza-card').forEach(card => {
     });
 });
 
-// Order Button Click Effect
+// Enhanced Order Button Click Effect
 document.querySelectorAll('.order-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         
         // Create ripple effect
         const ripple = document.createElement('span');
@@ -223,21 +276,66 @@ document.querySelectorAll('.order-btn').forEach(btn => {
         
         setTimeout(() => {
             ripple.remove();
-        }, 600);
+        }, 800);
         
-        // Show order confirmation
+        // Show order confirmation with enhanced animation
         const originalText = btn.innerHTML;
         btn.innerHTML = '<span>✅</span> Added to Cart!';
         btn.style.background = 'linear-gradient(45deg, #28a745, #20c997)';
+        btn.style.transform = 'scale(1.1)';
+        
+        // Create success pizza burst
+        createSuccessPizzaBurst(btn);
         
         setTimeout(() => {
             btn.innerHTML = originalText;
             btn.style.background = 'linear-gradient(45deg, var(--primary-color), var(--accent-color))';
-        }, 2000);
+            btn.style.transform = 'scale(1)';
+        }, 2500);
     });
 });
 
-// Contact Form Handling
+// Success Pizza Burst Animation
+function createSuccessPizzaBurst(button) {
+    const rect = button.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    for (let i = 0; i < 8; i++) {
+        const pizza = document.createElement('div');
+        pizza.textContent = '🍕';
+        pizza.style.position = 'fixed';
+        pizza.style.left = centerX + 'px';
+        pizza.style.top = centerY + 'px';
+        pizza.style.fontSize = '1.5rem';
+        pizza.style.zIndex = '9999';
+        pizza.style.pointerEvents = 'none';
+        
+        document.body.appendChild(pizza);
+        
+        // Animate pizza explosion
+        const angle = (i / 8) * Math.PI * 2;
+        const distance = 150;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+        
+        pizza.animate([
+            { 
+                transform: 'translate(-50%, -50%) scale(0) rotate(0deg)', 
+                opacity: 1 
+            },
+            { 
+                transform: `translate(${x - 50}px, ${y - 50}px) scale(1.2) rotate(360deg)`, 
+                opacity: 0 
+            }
+        ], {
+            duration: 1200,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        }).onfinish = () => pizza.remove();
+    }
+}
+
+// Enhanced Contact Form Handling
 const contactForm = document.getElementById('contactForm');
 contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -248,39 +346,42 @@ contactForm.addEventListener('submit', (e) => {
     const submitBtn = contactForm.querySelector('.submit-btn');
     const originalHTML = submitBtn.innerHTML;
     
-    // Loading state
+    // Loading state with animation
     submitBtn.innerHTML = '<span class="submit-pizza">🍕</span> Sending...';
     submitBtn.disabled = true;
+    submitBtn.style.transform = 'scale(0.95)';
     
     // Simulate API call delay
     setTimeout(() => {
         submitBtn.innerHTML = '<span>✅</span> Message Sent!';
         submitBtn.style.background = 'linear-gradient(45deg, #28a745, #20c997)';
+        submitBtn.style.transform = 'scale(1.05)';
         
-        // Reset form
+        // Reset form with animation
         contactForm.reset();
         
-        // Create success pizza animation
-        createSuccessPizzas();
+        // Create success pizza celebration
+        createFormSuccessCelebration();
         
-        // Reset button after 3 seconds
+        // Reset button after 4 seconds
         setTimeout(() => {
             submitBtn.innerHTML = originalHTML;
             submitBtn.disabled = false;
             submitBtn.style.background = 'linear-gradient(45deg, var(--primary-color), var(--accent-color))';
-        }, 3000);
+            submitBtn.style.transform = 'scale(1)';
+        }, 4000);
         
         console.log('Form submitted:', formObject);
         
     }, 2000);
 });
 
-// Success Pizza Animation
-function createSuccessPizzas() {
+// Form Success Celebration
+function createFormSuccessCelebration() {
     const form = document.querySelector('.contact-form');
     const rect = form.getBoundingClientRect();
     
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 12; i++) {
         const pizza = document.createElement('div');
         pizza.textContent = '🍕';
         pizza.style.position = 'fixed';
@@ -292,25 +393,27 @@ function createSuccessPizzas() {
         
         document.body.appendChild(pizza);
         
-        // Animate pizza explosion
-        const angle = (i / 5) * Math.PI * 2;
-        const distance = 100;
+        // Animate pizza celebration
+        const angle = (i / 12) * Math.PI * 2;
+        const distance = 200;
         const x = Math.cos(angle) * distance;
         const y = Math.sin(angle) * distance;
         
         pizza.animate([
-            { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
-            { transform: `translate(${x}px, ${y}px) rotate(360deg)`, opacity: 0 }
+            { transform: 'translate(-50%, -50%) scale(0) rotate(0deg)', opacity: 1 },
+            { transform: `translate(${x}px, ${y}px) scale(1.5) rotate(720deg)`, opacity: 0 }
         ], {
-            duration: 1000,
-            easing: 'ease-out'
+            duration: 1500,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
         }).onfinish = () => pizza.remove();
     }
 }
 
-// CTA Button Enhanced Effect
+// Enhanced CTA Button Effect
 const ctaButton = document.querySelector('.cta-button');
 ctaButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    
     // Ripple effect
     const ripple = document.createElement('span');
     ripple.classList.add('ripple');
@@ -324,36 +427,53 @@ ctaButton.addEventListener('click', (e) => {
     
     setTimeout(() => {
         ripple.remove();
-    }, 600);
+    }, 800);
     
-    // Scroll to menu
-    document.getElementById('menu').scrollIntoView({
+    // Create pizza trail effect
+    createPizzaTrail(e.clientX, e.clientY);
+    
+    // Smooth scroll to menu with offset
+    const menuSection = document.getElementById('menu');
+    const offsetTop = menuSection.offsetTop - 80;
+    window.scrollTo({
+        top: offsetTop,
         behavior: 'smooth'
     });
 });
 
-// Advanced Parallax Effect
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    
-    // Floating ingredients parallax
-    document.querySelectorAll('.floating-ingredient').forEach((ingredient, index) => {
-        const speed = 0.2 + (index * 0.1);
-        ingredient.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
-    });
-    
-    // Hero pizza animation
-    const heroPizza = document.querySelector('.spinning-pizza');
-    if (heroPizza) {
-        heroPizza.style.transform = `rotate(${scrolled * 0.5}deg) scale(${1 + scrolled * 0.001})`;
+// Pizza Trail Effect for CTA Button
+function createPizzaTrail(startX, startY) {
+    for (let i = 0; i < 6; i++) {
+        const pizza = document.createElement('div');
+        pizza.textContent = '🍕';
+        pizza.style.position = 'fixed';
+        pizza.style.left = startX + 'px';
+        pizza.style.top = startY + 'px';
+        pizza.style.fontSize = '1.5rem';
+        pizza.style.zIndex = '9999';
+        pizza.style.pointerEvents = 'none';
+        
+        document.body.appendChild(pizza);
+        
+        const randomX = (Math.random() - 0.5) * 200;
+        const randomY = (Math.random() - 0.5) * 200;
+        
+        pizza.animate([
+            { 
+                transform: 'translate(-50%, -50%) scale(0) rotate(0deg)', 
+                opacity: 1 
+            },
+            { 
+                transform: `translate(${randomX}px, ${randomY}px) scale(1) rotate(360deg)`, 
+                opacity: 0 
+            }
+        ], {
+            duration: 1000 + (i * 100),
+            easing: 'ease-out',
+            delay: i * 100
+        }).onfinish = () => pizza.remove();
     }
-    
-    // Background pizza slices
-    document.querySelectorAll('.pizza-slice').forEach((slice, index) => {
-        const speed = 0.1 + (index * 0.05);
-        slice.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.2}deg)`;
-    });
-});
+}
 
 // Scroll Progress Indicator
 function createScrollProgress() {
@@ -385,65 +505,77 @@ function createSectionObserver() {
                 entry.target.style.opacity = '1';
                 entry.target.style.transform = 'translateY(0)';
                 
-                // Animate section pizzas
+                // Animate section pizzas with stagger
                 const sectionPizzas = entry.target.querySelectorAll('.title-pizza, .logo-pizza');
                 sectionPizzas.forEach((pizza, index) => {
                     setTimeout(() => {
                         pizza.style.animation = 'none';
                         pizza.offsetHeight; // Trigger reflow
-                        pizza.style.animation = 'wiggle 2s ease-in-out infinite';
-                    }, index * 200);
+                        pizza.style.animation = 'wiggle 3s ease-in-out infinite';
+                    }, index * 300);
                 });
             }
         });
     }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
     });
     
     sections.forEach(section => {
         section.style.opacity = '0';
-        section.style.transform = 'translateY(50px)';
-        section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        section.style.transform = 'translateY(80px)';
+        section.style.transition = 'opacity 1s ease, transform 1s ease';
         sectionObserver.observe(section);
     });
 }
 
 createSectionObserver();
 
-// Pizza Cursor Trail (Desktop only)
-if (!('ontouchstart' in window)) {
+// Enhanced Pizza Cursor Trail (Desktop only)
+if (!('ontouchstart' in window) && window.innerWidth > 768) {
     let trail = [];
-    const trailLength = 5;
+    const trailLength = 8;
     
     document.addEventListener('mousemove', (e) => {
-        trail.push({ x: e.clientX, y: e.clientY });
+        trail.push({ x: e.clientX, y: e.clientY, time: Date.now() });
         if (trail.length > trailLength) {
             trail.shift();
         }
         
         // Remove old trail elements
-        document.querySelectorAll('.pizza-trail').forEach(el => el.remove());
+        document.querySelectorAll('.pizza-trail').forEach(el => {
+            if (Date.now() - parseInt(el.dataset.time) > 1000) {
+                el.remove();
+            }
+        });
         
-        // Create new trail
+        // Create new trail with enhanced effects
         trail.forEach((point, index) => {
-            const trailPizza = document.createElement('div');
-            trailPizza.className = 'pizza-trail';
-            trailPizza.textContent = '🍕';
-            trailPizza.style.cssText = `
-                position: fixed;
-                left: ${point.x}px;
-                top: ${point.y}px;
-                font-size: ${0.5 + (index / trailLength)}rem;
-                opacity: ${index / trailLength};
-                pointer-events: none;
-                z-index: 9999;
-                transform: translate(-50%, -50%);
-            `;
-            
-            document.body.appendChild(trailPizza);
-            
-            setTimeout(() => trailPizza.remove(), 500);
+            if (index % 2 === 0) { // Reduce density
+                const trailPizza = document.createElement('div');
+                trailPizza.className = 'pizza-trail';
+                trailPizza.textContent = '🍕';
+                trailPizza.dataset.time = Date.now();
+                trailPizza.style.cssText = `
+                    position: fixed;
+                    left: ${point.x}px;
+                    top: ${point.y}px;
+                    font-size: ${0.8 + (index / trailLength) * 0.5}rem;
+                    opacity: ${(index / trailLength) * 0.6};
+                    pointer-events: none;
+                    z-index: 9999;
+                    transform: translate(-50%, -50%) rotate(${index * 45}deg);
+                    transition: opacity 0.3s ease;
+                `;
+                
+                document.body.appendChild(trailPizza);
+                
+                setTimeout(() => {
+                    if (trailPizza.parentNode) {
+                        trailPizza.remove();
+                    }
+                }, 800);
+            }
         });
     });
 }
@@ -453,16 +585,18 @@ function enhanceMobileExperience() {
     const isMobile = window.innerWidth <= 768;
     
     if ('ontouchstart' in window) {
-        // Add touch feedback
+        // Add enhanced touch feedback
         document.querySelectorAll('.pizza-card, .cta-button, .submit-btn, .order-btn').forEach(element => {
             element.addEventListener('touchstart', function() {
-                this.style.transform = 'scale(0.98)';
+                this.style.transform = 'scale(0.95)';
+                this.style.transition = 'transform 0.1s ease';
             });
             
             element.addEventListener('touchend', function() {
                 setTimeout(() => {
                     this.style.transform = '';
-                }, 150);
+                    this.style.transition = 'transform 0.3s ease';
+                }, 100);
             });
         });
         
@@ -471,13 +605,19 @@ function enhanceMobileExperience() {
     }
     
     if (isMobile) {
-        // Reduce animation complexity
+        // Optimize animations for mobile performance
         document.querySelectorAll('.floating-ingredient').forEach(ingredient => {
-            ingredient.style.fontSize = '2rem';
+            ingredient.style.fontSize = '2.5rem';
+            ingredient.style.animationDuration = '8s';
         });
         
-        // Simplify parallax on mobile
-        window.removeEventListener('scroll', arguments.callee);
+        // Reduce pizza rain frequency on mobile
+        const pizzaDrops = document.querySelectorAll('.pizza-drop');
+        pizzaDrops.forEach((drop, index) => {
+            if (index % 3 !== 0) {
+                drop.remove();
+            }
+        });
     }
 }
 
@@ -485,50 +625,89 @@ enhanceMobileExperience();
 window.addEventListener('resize', enhanceMobileExperience);
 
 // Easter Egg: Pizza Party Mode
-let clickCount = 0;
+let logoClickCount = 0;
 document.querySelector('.logo-pizza').addEventListener('click', () => {
-    clickCount++;
-    if (clickCount >= 5) {
+    logoClickCount++;
+    if (logoClickCount >= 5) {
         pizzaPartyMode();
-        clickCount = 0;
+        logoClickCount = 0;
     }
 });
 
 function pizzaPartyMode() {
-    document.body.style.animation = 'rainbow 2s linear infinite';
+    // Add rainbow effect to body
+    document.body.style.animation = 'rainbow 3s linear infinite';
     
-    // Create pizza explosion
-    for (let i = 0; i < 20; i++) {
+    // Create mega pizza explosion
+    for (let i = 0; i < 30; i++) {
         setTimeout(() => {
             const pizza = document.createElement('div');
-            pizza.textContent = '🍕';
+            pizza.textContent = ['🍕', '🍅', '🧀', '🌿', '🍄'][Math.floor(Math.random() * 5)];
             pizza.style.cssText = `
                 position: fixed;
                 left: ${Math.random() * window.innerWidth}px;
                 top: ${Math.random() * window.innerHeight}px;
-                font-size: 3rem;
+                font-size: ${2 + Math.random() * 3}rem;
                 z-index: 9999;
                 pointer-events: none;
-                animation: partyPizza 3s ease-out forwards;
+                animation: partyPizza 4s ease-out forwards;
             `;
             
             document.body.appendChild(pizza);
-            setTimeout(() => pizza.remove(), 3000);
-        }, i * 100);
+            setTimeout(() => {
+                if (pizza.parentNode) {
+                    pizza.remove();
+                }
+            }, 4000);
+        }, i * 80);
     }
+    
+    // Show party message
+    showPartyMessage();
     
     // Reset after party
     setTimeout(() => {
         document.body.style.animation = '';
-    }, 3000);
+    }, 4000);
 }
 
-// Add rainbow keyframes for easter egg
-const style = document.createElement('style');
-style.textContent = `
+function showPartyMessage() {
+    const message = document.createElement('div');
+    message.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 30px 50px;
+            border-radius: 25px;
+            font-size: 2rem;
+            font-weight: bold;
+            z-index: 10000;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: partyMessage 4s ease-in-out forwards;
+        ">
+            🎉 PIZZA PARTY MODE! 🎉<br>
+            <span style="font-size: 1rem;">You found the secret!</span>
+        </div>
+    `;
+    
+    document.body.appendChild(message);
+    
+    setTimeout(() => {
+        message.remove();
+    }, 4000);
+}
+
+// Add keyframes for party mode
+const partyStyles = document.createElement('style');
+partyStyles.textContent = `
     @keyframes rainbow {
-        0% { filter: hue-rotate(0deg); }
-        100% { filter: hue-rotate(360deg); }
+        0% { filter: hue-rotate(0deg) saturate(1.2); }
+        100% { filter: hue-rotate(360deg) saturate(1.2); }
     }
     @keyframes partyPizza {
         0% {
@@ -536,532 +715,203 @@ style.textContent = `
             opacity: 1;
         }
         50% {
-            transform: scale(1.5) rotate(180deg);
+            transform: scale(1.8) rotate(180deg);
             opacity: 1;
         }
         100% {
-            transform: scale(0) rotate(360deg);
+            transform: scale(0.5) rotate(360deg);
+            opacity: 0;
+        }
+    }
+    @keyframes partyMessage {
+        0% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+        }
+        20% {
+            transform: translate(-50%, -50%) scale(1.2);
+            opacity: 1;
+        }
+        80% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(0);
             opacity: 0;
         }
     }
 `;
-document.head.appendChild(style);
-
-// Dynamic Pizza Menu Filtering (Advanced Feature)
-function createMenuFilter() {
-    const menuSection = document.querySelector('.menu-section .container');
-    const filterContainer = document.createElement('div');
-    filterContainer.className = 'menu-filters';
-    filterContainer.innerHTML = `
-        <div class="filter-buttons">
-            <button class="filter-btn active" data-filter="all">🍕 All Pizzas</button>
-            <button class="filter-btn" data-filter="classic">🇮🇹 Classic</button>
-            <button class="filter-btn" data-filter="premium">👑 Premium</button>
-            <button class="filter-btn" data-filter="veggie">🥬 Vegetarian</button>
-        </div>
-    `;
-    
-    const sectionTitle = menuSection.querySelector('.section-title');
-    sectionTitle.after(filterContainer);
-    
-    // Add filter functionality
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const pizzaCards = document.querySelectorAll('.pizza-card');
-    
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Update active button
-            filterButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            const filter = btn.dataset.filter;
-            
-            pizzaCards.forEach(card => {
-                if (filter === 'all') {
-                    card.style.display = 'block';
-                    card.style.animation = 'fadeInUp 0.5s ease-out';
-                } else {
-                    const cardType = card.dataset.pizza;
-                    const shouldShow = 
-                        (filter === 'classic' && ['margherita', 'pepperoni'].includes(cardType)) ||
-                        (filter === 'premium' && ['truffle', 'quattro', 'meat'].includes(cardType)) ||
-                        (filter === 'veggie' && ['veggie', 'margherita'].includes(cardType));
-                    
-                    if (shouldShow) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeInUp 0.5s ease-out';
-                    } else {
-                        card.style.animation = 'fadeOut 0.3s ease-out';
-                        setTimeout(() => {
-                            card.style.display = 'none';
-                        }, 300);
-                    }
-                }
-            });
-        });
-    });
-}
-
-// Add filter styles
-const filterStyles = document.createElement('style');
-filterStyles.textContent = `
-    .menu-filters {
-        margin-bottom: 40px;
-        text-align: center;
-    }
-    .filter-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        flex-wrap: wrap;
-    }
-    .filter-btn {
-        background: rgba(255,255,255,0.1);
-        border: 2px solid var(--primary-color);
-        color: var(--primary-color);
-        padding: 10px 20px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-    }
-    .filter-btn:hover,
-    .filter-btn.active {
-        background: var(--primary-color);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(212, 20, 42, 0.3);
-    }
-    @keyframes fadeOut {
-        from { opacity: 1; transform: scale(1); }
-        to { opacity: 0; transform: scale(0.8); }
-    }
-    @media (max-width: 768px) {
-        .filter-buttons {
-            flex-direction: column;
-            align-items: center;
-        }
-        .filter-btn {
-            width: 200px;
-        }
-    }
-`;
-document.head.appendChild(filterStyles);
-
-// Initialize menu filter
-createMenuFilter();
-
-// Pizza Size Selector for Cards
-document.querySelectorAll('.pizza-card').forEach(card => {
-    const sizeSelector = document.createElement('div');
-    sizeSelector.className = 'size-selector';
-    sizeSelector.innerHTML = `
-        <div class="size-options">
-            <button class="size-btn active" data-size="small" data-price="0">
-                <span class="size-pizza">🍕</span>
-                <span>Small</span>
-            </button>
-            <button class="size-btn" data-size="medium" data-price="4">
-                <span class="size-pizza">🍕</span>
-                <span>Medium (+$4)</span>
-            </button>
-            <button class="size-btn" data-size="large" data-price="8">
-                <span class="size-pizza">🍕</span>
-                <span>Large (+$8)</span>
-            </button>
-        </div>
-    `;
-    
-    const priceElement = card.querySelector('.price');
-    priceElement.after(sizeSelector);
-    
-    // Add size selector functionality
-    const sizeButtons = sizeSelector.querySelectorAll('.size-btn');
-    const basePrice = parseInt(priceElement.textContent.replace(', ''));
-    
-    sizeButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            
-            // Update active button
-            sizeButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Update price
-            const additionalPrice = parseInt(btn.dataset.price);
-            const newPrice = basePrice + additionalPrice;
-            priceElement.textContent = ' + ' + newPrice.toLocaleString();
-            
-            // Pizza size animation
-            const sizePizza = btn.querySelector('.size-pizza');
-            sizePizza.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                sizePizza.style.transform = 'scale(1)';
-            }, 200);
-        });
-    });
-});
-
-// Add size selector styles
-const sizeStyles = document.createElement('style');
-sizeStyles.textContent = `
-    .size-selector {
-        margin: 15px 0;
-        opacity: 0;
-        transform: translateY(10px);
-        transition: all 0.3s ease;
-    }
-    .pizza-card:hover .size-selector {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    .size-options {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-    }
-    .size-btn {
-        background: rgba(212, 20, 42, 0.1);
-        border: 1px solid var(--primary-color);
-        color: var(--primary-color);
-        padding: 5px 10px;
-        border-radius: 15px;
-        cursor: pointer;
-        font-size: 0.8rem;
-        transition: all 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-    }
-    .size-btn:hover,
-    .size-btn.active {
-        background: var(--primary-color);
-        color: white;
-    }
-    .size-pizza {
-        font-size: 1rem;
-        transition: transform 0.2s ease;
-    }
-`;
-document.head.appendChild(sizeStyles);
-
-// Shopping Cart Functionality
-let cart = [];
-
-function createShoppingCart() {
-    const cartIcon = document.createElement('div');
-    cartIcon.className = 'cart-icon';
-    cartIcon.innerHTML = `
-        <div class="cart-button">
-            🛒 <span class="cart-count">0</span>
-        </div>
-        <div class="cart-dropdown">
-            <h3>Your Order 🍕</h3>
-            <div class="cart-items"></div>
-            <div class="cart-total">Total: $0</div>
-            <button class="checkout-btn">Checkout</button>
-        </div>
-    `;
-    
-    document.body.appendChild(cartIcon);
-    
-    // Cart toggle functionality
-    const cartButton = cartIcon.querySelector('.cart-button');
-    const cartDropdown = cartIcon.querySelector('.cart-dropdown');
-    
-    cartButton.addEventListener('click', () => {
-        cartDropdown.classList.toggle('show');
-    });
-    
-    // Close cart when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!cartIcon.contains(e.target)) {
-            cartDropdown.classList.remove('show');
-        }
-    });
-}
-
-function updateCart() {
-    const cartCount = document.querySelector('.cart-count');
-    const cartItems = document.querySelector('.cart-items');
-    const cartTotal = document.querySelector('.cart-total');
-    
-    cartCount.textContent = cart.length;
-    
-    if (cart.length === 0) {
-        cartItems.innerHTML = '<p>Your cart is empty 😢</p>';
-        cartTotal.textContent = 'Total: $0';
-        return;
-    }
-    
-    let total = 0;
-    cartItems.innerHTML = '';
-    
-    cart.forEach((item, index) => {
-        const itemElement = document.createElement('div');
-        itemElement.className = 'cart-item';
-        itemElement.innerHTML = `
-            <span>${item.name} (${item.size})</span>
-            <span>${item.price}</span>
-            <button class="remove-item" data-index="${index}">❌</button>
-        `;
-        
-        cartItems.appendChild(itemElement);
-        total += item.price;
-    });
-    
-    cartTotal.textContent = `Total: ${total}`;
-    
-    // Add remove functionality
-    document.querySelectorAll('.remove-item').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const index = parseInt(e.target.dataset.index);
-            cart.splice(index, 1);
-            updateCart();
-        });
-    });
-}
-
-// Add cart styles
-const cartStyles = document.createElement('style');
-cartStyles.textContent = `
-    .cart-icon {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1001;
-    }
-    .cart-button {
-        background: var(--primary-color);
-        color: white;
-        padding: 10px 15px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: bold;
-        box-shadow: 0 5px 15px rgba(212, 20, 42, 0.3);
-        transition: all 0.3s ease;
-    }
-    .cart-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(212, 20, 42, 0.4);
-    }
-    .cart-count {
-        background: white;
-        color: var(--primary-color);
-        border-radius: 50%;
-        padding: 2px 6px;
-        margin-left: 5px;
-        font-size: 0.8rem;
-    }
-    .cart-dropdown {
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 300px;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        padding: 20px;
-        opacity: 0;
-        transform: translateY(-10px);
-        visibility: hidden;
-        transition: all 0.3s ease;
-        border: 2px solid var(--primary-color);
-    }
-    .cart-dropdown.show {
-        opacity: 1;
-        transform: translateY(0);
-        visibility: visible;
-    }
-    .cart-dropdown h3 {
-        margin-bottom: 15px;
-        color: var(--primary-color);
-        text-align: center;
-    }
-    .cart-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px solid #eee;
-    }
-    .remove-item {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 2px;
-    }
-    .cart-total {
-        font-weight: bold;
-        font-size: 1.2rem;
-        text-align: center;
-        margin: 15px 0;
-        color: var(--primary-color);
-    }
-    .checkout-btn {
-        width: 100%;
-        background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-        color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-    .checkout-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(212, 20, 42, 0.3);
-    }
-    @media (max-width: 768px) {
-        .cart-dropdown {
-            width: 280px;
-            right: -10px;
-        }
-    }
-`;
-document.head.appendChild(cartStyles);
-
-// Initialize cart
-createShoppingCart();
-updateCart();
-
-// Update order button functionality to add to cart
-document.querySelectorAll('.order-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        const card = btn.closest('.pizza-card');
-        const name = card.querySelector('h3').textContent;
-        const price = parseInt(card.querySelector('.price').textContent.replace(', ''));
-        const activeSize = card.querySelector('.size-btn.active');
-        const size = activeSize ? activeSize.dataset.size : 'small';
-        
-        // Add to cart
-        cart.push({ name, price, size });
-        updateCart();
-        
-        // Visual feedback
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = '<span>✅</span> Added to Cart!';
-        btn.style.background = 'linear-gradient(45deg, #28a745, #20c997)';
-        
-        setTimeout(() => {
-            btn.innerHTML = originalHTML;
-            btn.style.background = 'linear-gradient(45deg, var(--primary-color), var(--accent-color))';
-        }, 1500);
-        
-        // Cart bounce animation
-        const cartButton = document.querySelector('.cart-button');
-        cartButton.style.animation = 'bounce 0.5s ease';
-        setTimeout(() => {
-            cartButton.style.animation = '';
-        }, 500);
-    });
-});
+document.head.appendChild(partyStyles);
 
 // Keyboard Navigation Support
 document.addEventListener('keydown', (e) => {
-    // Escape key closes cart
+    // Escape key functionality
     if (e.key === 'Escape') {
-        document.querySelector('.cart-dropdown').classList.remove('show');
-        
         // Close mobile menu
         document.querySelector('.nav-menu').classList.remove('active');
         document.querySelector('.hamburger').classList.remove('active');
+        document.body.style.overflow = '';
     }
     
-    // Space or Enter on CTA button
-    if ((e.key === ' ' || e.key === 'Enter') && e.target === ctaButton) {
+    // Space or Enter on focused CTA button
+    if ((e.key === ' ' || e.key === 'Enter') && document.activeElement === ctaButton) {
         e.preventDefault();
         ctaButton.click();
+    }
+    
+    // Arrow key navigation for menu items
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        const focusableElements = document.querySelectorAll('.nav-link, .cta-button, .order-btn, .submit-btn');
+        const currentIndex = Array.from(focusableElements).indexOf(document.activeElement);
+        
+        if (currentIndex !== -1) {
+            e.preventDefault();
+            let nextIndex;
+            
+            if (e.key === 'ArrowDown') {
+                nextIndex = (currentIndex + 1) % focusableElements.length;
+            } else {
+                nextIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+            }
+            
+            focusableElements[nextIndex].focus();
+        }
     }
 });
 
 // Performance Optimization
 function optimizePerformance() {
-    // Lazy load pizza images
-    const pizzaImages = document.querySelectorAll('.pizza-photo');
+    // Lazy load images with intersection observer
+    const images = document.querySelectorAll('.pizza-photo');
     const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
                 img.style.opacity = '0';
-                img.onload = () => {
-                    img.style.transition = 'opacity 0.3s ease';
+                img.style.transition = 'opacity 0.5s ease';
+                
+                // Simulate loading effect
+                setTimeout(() => {
                     img.style.opacity = '1';
-                };
+                }, 200);
+                
                 imageObserver.unobserve(img);
             }
         });
-    });
+    }, { rootMargin: '50px' });
     
-    pizzaImages.forEach(img => imageObserver.observe(img));
+    images.forEach(img => imageObserver.observe(img));
     
-    // Reduce animations on low-end devices
+    // Reduce animations on low-performance devices
     if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
-        document.querySelectorAll('.floating-ingredient').forEach(ingredient => {
-            ingredient.style.animationDuration = '10s';
+        document.querySelectorAll('.floating-ingredient, .pizza-slice').forEach(element => {
+            element.style.animationDuration = '12s';
+        });
+        
+        // Reduce pizza rain frequency
+        const drops = document.querySelectorAll('.pizza-drop');
+        drops.forEach((drop, index) => {
+            if (index % 2 === 0) {
+                drop.remove();
+            }
         });
     }
+    
+    // Pause animations when tab is not visible
+    document.addEventListener('visibilitychange', () => {
+        const animatedElements = document.querySelectorAll('[style*="animation"]');
+        if (document.hidden) {
+            animatedElements.forEach(el => {
+                el.style.animationPlayState = 'paused';
+            });
+        } else {
+            animatedElements.forEach(el => {
+                el.style.animationPlayState = 'running';
+            });
+        }
+    });
 }
 
 optimizePerformance();
 
-// Final initialization message
-console.log('🍕 Enhanced Bella Pizza website loaded successfully!');
-console.log('🎉 Features loaded:');
-console.log('- Pizza rain animation');
-console.log('- Interactive shopping cart');
-console.log('- Menu filtering system');
-console.log('- Size selection');
-console.log('- Easter egg pizza party mode');
-console.log('- Mobile optimizations');
-console.log('- Accessibility features');
-console.log('- Performance optimizations');
-
-// Add final touch - welcome message
+// Initialize welcome message
 setTimeout(() => {
-    if (!sessionStorage.getItem('welcomeShown')) {
-        const welcome = document.createElement('div');
-        welcome.innerHTML = `
-            <div style="
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: white;
-                padding: 30px;
-                border-radius: 20px;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-                z-index: 10000;
-                text-align: center;
-                border: 3px solid var(--primary-color);
-                animation: fadeInUp 0.5s ease;
-            ">
-                <h2 style="color: var(--primary-color); margin-bottom: 15px;">
-                    🍕 Welcome to Bella Pizza! 🍕
-                </h2>
-                <p style="margin-bottom: 20px; color: #666;">
-                    Click the logo 5 times for a surprise! 🎉
-                </p>
-                <button onclick="this.parentElement.parentElement.remove(); sessionStorage.setItem('welcomeShown', 'true');" 
-                        style="
-                            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-                            color: white;
-                            border: none;
-                            padding: 10px 20px;
-                            border-radius: 25px;
-                            cursor: pointer;
-                            font-weight: bold;
-                        ">
-                    Let's Order! 🍕
-                </button>
-            </div>
-        `;
-        document.body.appendChild(welcome);
+    if (!localStorage.getItem('welcomeShown')) {
+        showWelcomeMessage();
     }
-}, 2000);
+}, 2500);
+
+function showWelcomeMessage() {
+    const welcome = document.createElement('div');
+    welcome.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-dark);
+            color: var(--light-color);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            z-index: 10000;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            animation: fadeInUp 0.6s ease;
+            max-width: 90vw;
+            width: 400px;
+        ">
+            <h2 style="color: var(--primary-color); margin-bottom: 20px; font-size: 1.8rem;">
+                🍕 Welcome to Orca Pizza! 🍕
+            </h2>
+            <p style="margin-bottom: 25px; color: var(--text-muted); line-height: 1.6;">
+                Experience artisan pizza perfection with interactive features and delightful animations!
+            </p>
+            <p style="margin-bottom: 25px; font-size: 0.9rem; color: var(--text-muted);">
+                💡 Tip: Click the logo 5 times for a surprise!
+            </p>
+            <button onclick="this.parentElement.parentElement.remove(); localStorage.setItem('welcomeShown', 'true');" 
+                    style="
+                        background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+                        color: white;
+                        border: none;
+                        padding: 15px 30px;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        font-weight: bold;
+                        font-size: 1rem;
+                        transition: all 0.3s ease;
+                    "
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(212, 20, 42, 0.4)';"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                Let's Order! 🍕
+            </button>
+        </div>
+    `;
+    document.body.appendChild(welcome);
+}
+
+// Console welcome message
+console.log(`
+🍕 Enhanced Orca Pizza Website Loaded Successfully! 🍕
+
+✨ Features Activated:
+• Interactive pizza animations throughout the page
+• Mobile-responsive hamburger navigation
+• Smooth scrolling and parallax effects
+• Enhanced order button with success animations
+• Pizza rain background effect
+• Touch-optimized mobile experience
+• Keyboard navigation support
+• Performance optimizations
+• Easter egg pizza party mode (click logo 5 times!)
+• Accessibility improvements
+
+🚀 Ready to serve delicious digital experiences!
+`);
+
+// Add custom cursor for desktop
+if (!('ontouchstart' in window) && window.innerWidth > 768) {
+    document.body.style.cursor = 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'%3e%3ctext y=\'16\' font-size=\'16\'%3e🍕%3c/text%3e%3c/svg%3e"), auto';
+}
