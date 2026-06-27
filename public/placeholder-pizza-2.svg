@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600" role="img" aria-labelledby="title desc">
+<title id="title">Pizza Placeholder</title>
+<desc id="desc">A simple pizza icon illustration placeholder.</desc>
+<rect width="600" height="600" fill="#ede9ff"/>
+<circle cx="300" cy="300" r="240" fill="#f8d7a4" stroke="#d7a65f" stroke-width="22"/>
+<circle cx="300" cy="300" r="200" fill="#fedfbb"/>
+<path d="M200 240 C220 210 260 190 300 200 C340 210 380 240 400 260 C350 310 330 350 300 370 C260 390 220 390 200 360 Z" fill="#e56d62"/>
+<g fill="#a3b18a">
+  <circle cx="260" cy="310" r="14"/>
+  <circle cx="340" cy="310" r="14"/>
+  <circle cx="300" cy="240" r="14"/>
+</g>
+<g fill="#d19e65">
+  <circle cx="240" cy="350" r="10"/>
+  <circle cx="360" cy="360" r="10"/>
+</g>
+</svg>
