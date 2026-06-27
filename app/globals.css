@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------
+   Day (flour & daylight) / Night (wood-oven embers)
+   --------------------------------------------------- */
+:root {
+  --bg: #fbf3e7;
+  --bg-soft: #f4e7d2;
+  --surface: #ffffff;
+  --text: #2b1b12;
+  --text-muted: #6b5847;
+  --primary: #c8312b;
+  --primary-dark: #9f2521;
+  --accent: #d99a3f;
+  --accent-2: #4f6f52;
+  --border: rgba(43, 27, 18, 0.12);
+}
+
+.dark {
+  --bg: #181210;
+  --bg-soft: #221a15;
+  --surface: #2a2018;
+  --text: #f2e8dc;
+  --text-muted: #c9b9a6;
+  --primary: #e85d2c;
+  --primary-dark: #c44a20;
+  --accent: #e2ad4f;
+  --accent-2: #7da179;
+  --border: rgba(242, 232, 220, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Focus visibility for keyboard users */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Custom scrollbar, subtle */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 8px;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
